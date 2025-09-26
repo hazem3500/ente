@@ -127,6 +127,7 @@ services:
       args:
         - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
         - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
+        - NEXT_PUBLIC_CUSTOM_DOMAIN=photos.zem.cool
     ports:
       - 3003:3000
       - 3004:3001
@@ -139,6 +140,7 @@ services:
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
       - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
       - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
+      - NEXT_PUBLIC_CUSTOM_DOMAIN=photos.zem.cool
     depends_on:
       - museum
     networks:
