@@ -22,7 +22,6 @@ services:
       - ./data:/data:ro
     networks:
       - default
-      - dokploy
 
   socat:
     image: alpine/socat
@@ -98,5 +97,5 @@ volumes:
 networks:
   default:
   dokploy:
-    external:
-      name: dokploy-network
+    external: true
+    name: dokploy-network
