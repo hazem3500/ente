@@ -3,7 +3,7 @@ services:
     build:
       context: ..
     ports:
-      - 8080:8080 # Museum/API
+      - 8081:8080 # Museum/API
     depends_on:
       postgres:
         condition: service_healthy
