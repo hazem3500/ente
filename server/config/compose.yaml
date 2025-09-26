@@ -18,13 +18,10 @@ services:
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
-      - ENTE_S3_ACCESS_KEY_ID=ente_minio_admin
-      - ENTE_S3_SECRET_ACCESS_KEY=${ENTE_S3_SECRET_ACCESS_KEY}
-      - ENTE_S3_BUCKET_NAME=b2-eu-cen
-      - ENTE_S3_ENDPOINT=http://minio:3200
-      - ENTE_S3_REGION=${ENTE_S3_REGION}
-    entrypoint: ["/bin/server"]
-    command: ["serve", "--config-file", "/etc/ente/museum.yaml"]
+      - AWS_ACCESS_KEY_ID=${MINIO_ROOT_USER}
+      - AWS_SECRET_ACCESS_KEY=${MINIO_ROOT_PASSWORD}
+      - AWS_REGION=eu-central-1
+      - AWS_ENDPOINT_URL=http://minio:3200
     volumes:
       - ./data:/data:ro
     networks:
