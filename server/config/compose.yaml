@@ -8,9 +8,12 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=${POSTGRES_DB}
+      - DATABASE_USERNAME=${POSTGRES_USER}
+      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
+      - DATABASE_SSL_MODE=disable
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
@@ -18,7 +21,6 @@ services:
     volumes:
       - ./data:/data:ro
 
-  # Resolve "localhost:3200" in the museum container to the minio container.
   socat:
     image: alpine/socat
     network_mode: service:museum
@@ -31,11 +33,6 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
-    # Wait for postgres to accept connections before starting museum.
     healthcheck:
       test: pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}
       start_period: 30s
@@ -47,15 +44,9 @@ services:
     image: minio/minio
     ports:
       - 3200:3200 # MinIO API
-      # - 3201:3201 # MinIO Console (uncomment to access externally)
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     command: server /data --address ":3200" --console-address ":3201"
     volumes:
       - minio-data:/data
@@ -88,13 +79,10 @@ services:
       - 3007:3004
     environment:
       - NODE_ENV=development
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
+    depends_on:
+      - museum
 
 volumes:
   postgres-data:
