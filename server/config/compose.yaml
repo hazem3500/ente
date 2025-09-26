@@ -74,12 +74,6 @@ services:
     networks:
       - default
 
-  socat:
-    image: alpine/socat
-    network_mode: service:museum
-    depends_on: [museum]
-    command: "TCP-LISTEN:3200,fork,reuseaddr TCP:minio:3200"
-
   postgres:
     image: postgres:15-trixie
     environment:
@@ -122,6 +116,7 @@ services:
           '
     networks:
       - default
+      - dokploy
 
   ente-web:
     build:
