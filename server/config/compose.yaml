@@ -20,6 +20,9 @@ services:
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     volumes:
       - ./data:/data:ro
+    networks:
+      - default
+      - dokploy
 
   socat:
     image: alpine/socat
@@ -39,6 +42,8 @@ services:
       start_interval: 1s
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - default
 
   minio:
     image: minio/minio
@@ -67,6 +72,8 @@ services:
           mc mb -p wasabi-eu-central-2-v3
           mc mb -p scw-eu-fr-v3
           '
+  networks:
+    - default
 
   ente-web:
     build:
@@ -83,7 +90,15 @@ services:
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     depends_on:
       - museum
+    networks:
+      - default
+      - dokploy
 
 volumes:
   postgres-data:
   minio-data:
+
+networks:
+  default:
+  dokploy:
+    external: true
