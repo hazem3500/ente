@@ -16,7 +16,6 @@ services:
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     volumes:
-      - ./museum.yaml:/museum.yaml:ro
       - ./data:/data:ro
 
   # Resolve "localhost:3200" in the museum container to the minio container.
