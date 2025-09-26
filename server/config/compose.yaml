@@ -75,9 +75,10 @@ services:
       - AWS_REGION=eu-central-1
       - AWS_ENDPOINT_URL=http://minio:3200
       - AWS_S3_BUCKET=${AWS_S3_BUCKET}
-    volumes:
-      - shared-config:/app:ro
+   volumes:
+      - shared-config:/workdir:ro
       - ./data:/data:ro
+    working_dir: /workdir
     networks:
       - default
 
