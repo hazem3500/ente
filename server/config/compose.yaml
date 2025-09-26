@@ -43,6 +43,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - default
+      - dokploy
 
   minio:
     image: minio/minio
