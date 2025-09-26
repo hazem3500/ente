@@ -23,6 +23,7 @@ services:
       - ENTE_S3_BUCKET_NAME=b2-eu-cen
       - ENTE_S3_ENDPOINT=http://minio:3200
       - ENTE_S3_REGION=${ENTE_S3_REGION}
+    entrypoint: ["/bin/server"]
     command: ["serve", "--config-file", "/etc/ente/museum.yaml"]
     volumes:
       - ./data:/data:ro
