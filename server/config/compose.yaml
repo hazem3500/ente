@@ -1,10 +1,62 @@
 services:
+  # Config generator - creates museum.yaml from environment variables
+  config-generator:
+    image: alpine:latest
+    command: |
+      sh -c '
+      cat > /shared/museum.yaml << EOF
+      db:
+        host: postgres
+        port: 5432
+        name: $${POSTGRES_DB}
+        user: $${POSTGRES_USER}
+        password: $${POSTGRES_PASSWORD}
+
+      s3:
+        are_local_buckets: true
+        use_path_style_urls: true
+        b2-eu-cen:
+          key: $${MINIO_ROOT_USER}
+          secret: $${MINIO_ROOT_PASSWORD}
+          endpoint: minio:3200
+          region: eu-central-1
+          bucket: b2-eu-cen
+
+      apps:
+        public-albums: $${ENTE_ALBUMS_ORIGIN}
+        cast: $${ENTE_ALBUMS_ORIGIN}
+        accounts: $${ENTE_ALBUMS_ORIGIN}
+
+      key:
+        encryption: $${ENTE_ENCRYPTION_KEY}
+        hash: $${ENTE_HASH_KEY}
+
+      jwt:
+        secret: $${ENTE_JWT_SECRET}
+      EOF
+      echo "Generated museum.yaml successfully"
+      cat /shared/museum.yaml
+      '
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
+      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
+      - ENTE_ENCRYPTION_KEY=${ENTE_ENCRYPTION_KEY}
+      - ENTE_HASH_KEY=${ENTE_HASH_KEY}
+      - ENTE_JWT_SECRET=${ENTE_JWT_SECRET}
+    volumes:
+      - shared-config:/shared
   museum:
     build:
       context: ..
     ports:
       - 8081:8080
     depends_on:
+      config-generator:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
     environment:
@@ -24,7 +76,9 @@ services:
       - AWS_ENDPOINT_URL=http://minio:3200
       - AWS_S3_BUCKET=${AWS_S3_BUCKET}
     volumes:
+      - shared-config:/config:ro
       - ./data:/data:ro
+    command: ["--config-file", "/config/museum.yaml"]
     networks:
       - default
 
@@ -104,6 +158,7 @@ services:
 volumes:
   postgres-data:
   minio-data:
+  shared-config:
 
 networks:
   default:
