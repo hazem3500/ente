@@ -82,9 +82,11 @@ services:
       - 3006:3003
       - 3007:3004
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
+      - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
+      - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
     depends_on:
       - museum
     networks:
