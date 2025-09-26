@@ -3,7 +3,7 @@ services:
     build:
       context: ..
     ports:
-      - 8081:8080 # Museum/API
+      - 8081:8080
     depends_on:
       postgres:
         condition: service_healthy
@@ -48,7 +48,7 @@ services:
   minio:
     image: minio/minio
     ports:
-      - 3200:3200 # MinIO API
+      - 3200:3200
     environment:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
@@ -59,25 +59,22 @@ services:
       - command: |
           sh -c '
           #!/bin/sh
-
           while ! mc alias set h0 http://minio:3200 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} 2>/dev/null
           do
             echo "Waiting for minio..."
             sleep 0.5
           done
-
           cd /data
-
           mc mb -p b2-eu-cen
           mc mb -p wasabi-eu-central-2-v3
           mc mb -p scw-eu-fr-v3
           '
-  networks:
-    - default
+    networks:
+      - default
 
   ente-web:
     build:
-      context: ../../web    
+      context: ../../web
     ports:
       - 3003:3000
       - 3004:3001
