@@ -14,7 +14,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
+      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     volumes:
       - ./museum.yaml:/museum.yaml:ro
       - ./data:/data:ro
@@ -35,7 +35,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
+      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     # Wait for postgres to accept connections before starting museum.
     healthcheck:
       test: pg_isready -q -d ${POSTGRES_DB} -U ${POSTGRES_USER}
@@ -56,7 +56,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
+      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     command: server /data --address ":3200" --console-address ":3201"
     volumes:
       - minio-data:/data
@@ -82,11 +82,11 @@ services:
     build:
       context: ../../web    
     ports:
-      - 3000:3000
-      - 3001:3001
-      - 3002:3002
-      - 3003:3003
-      - 3004:3004
+      - 3003:3000
+      - 3004:3001
+      - 3005:3002
+      - 3006:3003
+      - 3007:3004
     environment:
       - NODE_ENV=development
       - POSTGRES_USER=${POSTGRES_USER}
@@ -95,7 +95,7 @@ services:
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
-      - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
+      - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
 
 volumes:
   postgres-data:
