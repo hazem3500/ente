@@ -64,8 +64,13 @@ services:
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
     volumes:
-      - shared-config:/museum.yaml:ro  # Mount the file directly as museum.yaml in root
+      - shared-config:/shared-config:ro
       - ./data:/data:ro
+    command: |
+      sh -c '
+      cp /shared-config/museum.yaml /museum.yaml
+      ./museum
+      '
     networks:
       - default
 
