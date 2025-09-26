@@ -78,7 +78,6 @@ services:
     volumes:
       - shared-config:/config:ro
       - ./data:/data:ro
-    command: ["--config-file", "/config/museum.yaml"]
     networks:
       - default
 
