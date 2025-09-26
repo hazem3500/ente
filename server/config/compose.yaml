@@ -76,7 +76,7 @@ services:
       - AWS_ENDPOINT_URL=http://minio:3200
       - AWS_S3_BUCKET=${AWS_S3_BUCKET}
     volumes:
-      - shared-config:/config:ro
+      - shared-config:/app:ro
       - ./data:/data:ro
     networks:
       - default
