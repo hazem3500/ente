@@ -51,8 +51,7 @@ services:
       - shared-config:/shared
 
   museum:
-    build:
-      context: ..
+    image: ghcr.io/ente-io/server:latest
     ports:
       - 8081:8080
     depends_on:
@@ -69,7 +68,6 @@ services:
     command: |
       sh -c '
       cp /shared-config/museum.yaml /museum.yaml
-      echo "91.98.67.202 storage.photos.zem.cool" >> /etc/hosts
       ./museum
       '
     networks:
@@ -107,7 +105,7 @@ services:
       - command: |
           sh -c '
           #!/bin/sh
-          while ! mc alias set h0 http://minio:3200 ${MINIO_ROOT_USER} ${MINIO_ROOT_PASSWORD} 2>/dev/null
+          while ! mc alias set h0 http://minio:3200 $${MINIO_ROOT_USER} $${MINIO_ROOT_PASSWORD} 2>/dev/null
           do
             echo "Waiting for minio..."
             sleep 0.5
@@ -122,12 +120,7 @@ services:
       - dokploy
 
   ente-web:
-    build:
-      context: ../../web
-      args:
-        - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
-        - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
-        - NEXT_PUBLIC_CUSTOM_DOMAIN=photos.zem.cool
+    image: ghcr.io/ente-io/web:latest
     ports:
       - 3003:3000
       - 3004:3001
@@ -140,7 +133,6 @@ services:
       - ENTE_ALBUMS_ORIGIN=${ENTE_ALBUMS_ORIGIN}
       - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
       - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
-      - NEXT_PUBLIC_CUSTOM_DOMAIN=photos.zem.cool
     depends_on:
       - museum
     networks:
