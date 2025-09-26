@@ -75,9 +75,9 @@ services:
   ente-web:
     build:
       context: ../../web
-    args:
-      - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
-      - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
+      args:
+        - NEXT_PUBLIC_ENTE_ENDPOINT=${ENTE_API_ORIGIN}
+        - NEXT_PUBLIC_ENTE_ALBUMS_ENDPOINT=${ENTE_ALBUMS_ORIGIN}
     ports:
       - 3003:3000
       - 3004:3001
