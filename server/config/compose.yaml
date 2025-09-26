@@ -8,12 +8,12 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      - DATABASE_HOST=postgres
-      - DATABASE_PORT=5432
-      - DATABASE_NAME=${POSTGRES_DB}
-      - DATABASE_USERNAME=${POSTGRES_USER}
-      - DATABASE_PASSWORD=${POSTGRES_PASSWORD}
-      - DATABASE_SSL_MODE=disable
+      - ENTE_DB_HOST=postgres
+      - ENTE_DB_PORT=5432
+      - ENTE_DB_NAME=${POSTGRES_DB}
+      - ENTE_DB_USER=${POSTGRES_USER}
+      - ENTE_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - ENTE_DB_SSLMODE=disable
       - MINIO_ROOT_USER=${MINIO_ROOT_USER}
       - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
       - ENTE_API_ORIGIN=${ENTE_API_ORIGIN}
